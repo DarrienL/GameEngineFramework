@@ -17,7 +17,7 @@ int main() {
 	r2->Deserialize(readStream);
 	readStream.close();
 	cout << "r2 values: ";
-	r1->ToString();
+	r2->ToString();
 
 	delete objP;
 }
