@@ -9,6 +9,7 @@
 #include <cinttypes>
 #include <stdio.h>
 #include <thread>
+#include <map>
 
 // Project headers
 #include "Singleton.h"
