@@ -22,6 +22,7 @@ public:
 	// Methods
 	void ToString();
 	static ObjectPool<Asset>* Pool;
+	void Reset();
 
 private:
 	// Members
