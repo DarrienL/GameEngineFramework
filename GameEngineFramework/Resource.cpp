@@ -93,3 +93,5 @@ void Resource::Deserialize(std::istream& _stream) {
 	DeserializePointer(_stream, m_subResource);
 	DeserializeAsset(_stream, m_asset);
 }
+
+void Resource::Reset() {}
