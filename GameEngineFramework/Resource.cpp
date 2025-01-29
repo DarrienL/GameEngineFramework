@@ -64,3 +64,5 @@ void Resource::Deserialize(std::istream& _stream) {
 	_stream.read(reinterpret_cast<char*>(&m_val3), sizeof(m_val3));
 	DeserializePointer(_stream, m_subResource);
 }
+
+void Resource::Reset() {}

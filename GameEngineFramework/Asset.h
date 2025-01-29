@@ -20,6 +20,7 @@ public:
 
 	// Methods
 	static ObjectPool<Asset>* Pool;
+	void Reset();
 
 private:
 	// Members
