@@ -16,6 +16,7 @@ public:
 	virtual void Deserialize(std::istream& _stream);
 	virtual void AssignNonDefaultValues();
 	virtual void ToString();
+	virtual void Reset();
 
 	// Members
 	static ObjectPool<Resource>* Pool;
