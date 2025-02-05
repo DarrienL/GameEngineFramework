@@ -29,7 +29,7 @@ public:
 	SDL_Renderer* GetRenderer() { return m_renderer; }
 
 	// Methods
-	void Intialize(int _xResolution, int _yResolution);
+	void Initialize(int _xResolution, int _yResolution);
 	void SetDrawColor(Color _color);
 	void ClearScreen();
 	void Shutdown();
@@ -38,7 +38,7 @@ private:
 	// Members
 	SDL_Window* m_window;
 	SDL_Renderer* m_renderer;
-	SDL_rect m_destRect;
+	SDL_Rect m_destRect;
 };
 
 #endif
