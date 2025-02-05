@@ -2,30 +2,24 @@
 
 Level::Level() {
 	AssetController::Instance().Initialize(10000000);
-	Unit::Pool = new ObjectPool<Unit>();
-	SoundEffect::Pool = new ObjectPool<SoundEffect>();
+	FileChunk::Pool = new ObjectPool<FileChunk>();
 
-	m_mapSizeX = 0;
-	m_mapSizeY = 0;
-	m_gameTime = 0.0f;
-	m_units.clear();
+	m_chunks.clear();
+	m_imageBuffer = nullptr;
+	m_imageBufferSize = 0;
 }
 
 Level::~Level() {
-	m_units.clear();
-	delete SoundEffect::Pool;
-	delete Unit::Pool;
+	m_chunks.clear();
+	delete FileChunk::Pool;
 	AssetController::Instance().Clear();
 }
 
 void Level::AssignNonDefaultValues() {
-	m_mapSizeX = 128;
-	m_mapSizeY = 128;
-	m_gameTime = 101.5f;
-	for (int count = 0; count < 5; count++) {
-		Unit* unit = Unit::Pool->GetResource();
-		unit->AssignNonDefaultValues();
-		m_units.push_back(unit);
+	for (int count = 0; count < 7; count++) {
+		FileChunk* chunk = FileChunk::Pool->GetResource();
+		chunk->AssignNonDefaultValues();
+		m_chunks.push_back(chunk);
 	}
 	Resource::AssignNonDefaultValues();
 }

@@ -1,7 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "Unit.h"
+#include "FileChunk.h"
 
 class Level : public Resource
 {
@@ -15,14 +15,16 @@ public:
 	void Deserialize(std::istream& _stream) override;
 	void ToString() override;
 	void AssignNonDefaultValues() override;
+	void CreateImageBuffer();
+	void DeleteImageBuffer();
+	void AddChunkToBuffer();
+	void RemoveChunkFromBuffer();
 
 private:
 	// Members
-	int m_mapSizeX;
-	int m_mapSizeY;
-	float m_gameTime;
-	vector<Unit*> m_units;
-	// and more
+	vector<FileChunk*> m_chunks;
+	char* m_imageBuffer;
+	size_t m_imageBufferSize;
 };
 
 #endif
