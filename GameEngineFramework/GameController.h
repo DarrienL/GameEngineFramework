@@ -1,6 +1,8 @@
 #ifndef GAME_CONTROLLER_H
 #define GAME_CONTROLLER_H
 
+#include "StandardIncludes.h"
+
 class GameController : public Singleton<GameController>
 {
 public: 
@@ -12,6 +14,7 @@ public:
 	void RunGame();
 
 private:
+	// Members
 	SDL_Event m_sdlEvent;
 };
 

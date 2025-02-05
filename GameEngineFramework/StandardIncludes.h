@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include <thread>
 #include <map>
-#include <SDL3/SDL.h>
+#include <SDL.h>
 
 // Project headers
 #include "Singleton.h"
