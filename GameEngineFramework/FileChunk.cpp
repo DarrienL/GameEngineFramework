@@ -9,22 +9,26 @@ FileChunk::FileChunk() {
 FileChunk::~FileChunk() {}
 
 void FileChunk::AssignNonDefaultValues() {
-	// m_soundEffect = SoundEffect::Pool->GetResource();
-	// m_soundEffect->AssignNonDefaultValues();
-	// Resource::AssignNonDefaultValues();
+	m_chunk = AssetController::Instance().GetAsset("chunk0.bin");
+	Resource::AssignNonDefaultValues();
 }
 
 void FileChunk::Serialize(std::ostream& _stream) {
-	SerializePointer(_stream, m_chunk);
+	SerializeAsset(_stream, m_chunk);
 	Resource::Serialize(_stream);
 }
 
 void FileChunk::Deserialize(std::istream& _stream) {
-	DeserializePointer(_stream, m_chunk);
+	DeserializeAsset(_stream, m_chunk);
 	Resource::Deserialize(_stream);
 }
 
 void FileChunk::ToString() {
-	cout << "test" << endl;
+	cout << "CHUNK" << endl;
 	Resource::ToString();
+}
+
+void FileChunk::LoadChunk(int chunkNumber) {
+	m_chunk = AssetController::Instance().GetAsset("chunk" + to_string(chunkNumber) + ".bin");
+	// Resource::AssignNonDefaultValues();
 }

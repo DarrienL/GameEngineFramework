@@ -3,6 +3,8 @@
 
 #include "Resource.h"
 
+class Asset;
+
 class FileChunk : public Resource
 {
 public:
@@ -15,10 +17,11 @@ public:
 	void SetChunk(Asset* _part) { m_chunk = _part; }
 
 	// Methods
-	virtual void Serialize(std::ostream& _stream);
-	virtual void Deserialize(std::istream& _stream);
-	virtual void ToString();
-	virtual void AssignNonDefaultValues();
+	virtual void Serialize(std::ostream& _stream) override;
+	virtual void Deserialize(std::istream& _stream) override;
+	virtual void ToString() override;
+	virtual void AssignNonDefaultValues() override;
+	void LoadChunk(int chunkNumber);
 
 	static ObjectPool <FileChunk>* Pool;
 

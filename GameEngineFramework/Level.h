@@ -15,6 +15,7 @@ public:
 	void Deserialize(std::istream& _stream) override;
 	void ToString() override;
 	void AssignNonDefaultValues() override;
+	void SaveImageBuffer();
 	void CreateImageBuffer();
 	void DeleteImageBuffer();
 	void AddChunkToBuffer();
@@ -25,6 +26,7 @@ private:
 	vector<FileChunk*> m_chunks;
 	char* m_imageBuffer;
 	size_t m_imageBufferSize;
+	int m_currentChunkIndex;
 };
 
 #endif
