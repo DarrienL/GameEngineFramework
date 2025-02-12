@@ -33,7 +33,12 @@ void GameController::RunGame() {
         r->ClearScreen();
         r->RenderTexture(sheet, sheet->Update(EN_AN_IDLE), Rect(0, 0, 69 * 3, 44 * 3));
         r->RenderTexture(sheet, sheet->Update(EN_AN_RUN), Rect(0, 150, 69 * 3, 150 + 44 * 3));
-        font20->Write(r->GetRenderer(), "Testing 123!", SDL_Color{ 0, 255, 0 }, SDL_Point{ 150, 50 });
+        
+        std::string s = "Frame number: " + std::to_string(sheet->GetCurrentClip(EN_AN_IDLE));
+        font20->Write(r->GetRenderer(), s.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 250, 50 });
+        s = "Frame number: " + std::to_string(sheet->GetCurrentClip(EN_AN_RUN));
+        font20->Write(r->GetRenderer(), s.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 250, 200 });
+
         SDL_RenderPresent(r->GetRenderer());
     }
 
