@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "SpriteSheet.h"
 #include "TTFont.h"
+#include "Timing.h"
 
 GameController::GameController() {
     m_sdlEvent = { };
@@ -12,6 +13,7 @@ GameController::~GameController() {}
 void GameController::RunGame() {
     AssetController::Instance().Initialize(10000000); // Allocate 10MB
     Renderer* r = &Renderer::Instance();
+    Timing* t = &Timing::Instance();
     r->Initialize(800, 600);
 
     TTFont* font20 = new TTFont();
@@ -28,6 +30,8 @@ void GameController::RunGame() {
     sheet->AddAnimation(EN_AN_RUN, 6, 8, 0.005f);
 
     while (m_sdlEvent.type != SDL_QUIT) {
+        t->Tick();
+
         SDL_PollEvent(&m_sdlEvent);
         r->SetDrawColor(Color(255, 255, 255, 255));
         r->ClearScreen();
@@ -36,8 +40,12 @@ void GameController::RunGame() {
         
         std::string s = "Frame number: " + std::to_string(sheet->GetCurrentClip(EN_AN_IDLE));
         font20->Write(r->GetRenderer(), s.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 250, 50 });
+        
         s = "Frame number: " + std::to_string(sheet->GetCurrentClip(EN_AN_RUN));
         font20->Write(r->GetRenderer(), s.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 250, 200 });
+
+        std::string fps = "Frames Per Second: " + std::to_string(t->GetFPS());
+        font20->Write(r->GetRenderer(), fps.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 0, 0 });
 
         SDL_RenderPresent(r->GetRenderer());
     }
