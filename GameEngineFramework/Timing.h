@@ -10,7 +10,7 @@ public:
 	Timing();
 	virtual ~Timing(){ }
 
-	// Accestors
+	// Accessors
 	unsigned int GetFPS() { return m_fpsLast; }
 	float GetDeltaTime() { return m_deltaTime; }
 
