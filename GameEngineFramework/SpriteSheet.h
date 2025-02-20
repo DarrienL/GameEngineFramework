@@ -7,7 +7,16 @@
 
 enum AnimationNames {
 	EN_AN_IDLE = 0,
-	EN_AN_RUN,
+	EN_AN_RUN0,
+	EN_AN_RUN1,
+	EN_AN_RUN2,
+	EN_AN_RUN3,
+	EN_AN_RUN4,
+	EN_AN_RUN5,
+	EN_AN_RUN6,
+	EN_AN_RUN7,
+	EN_AN_RUN8,
+	EN_AN_RUN9,
 	EN_AN_COMBO_ATTACK,
 	EN_AN_DEATH,
 	EN_AN_HURT,
@@ -19,7 +28,8 @@ enum AnimationNames {
 	EN_AN_DASH,
 	EN_AN_DASH_ATTACK,
 	EN_AN_SLIDE,
-	EN_AN_LADDER_GRAB
+	EN_AN_LADDER_GRAB,
+	ROCK
 };
 
 class SpriteSheet : public Texture

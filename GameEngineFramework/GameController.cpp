@@ -1,58 +1,48 @@
 #include "GameController.h"
-#include "Renderer.h"
-#include "SpriteSheet.h"
-#include "TTFont.h"
-#include "Timing.h"
+#include "Level.h"
 
-GameController::GameController() {
-    m_sdlEvent = { };
-}
+using namespace std;
+
+GameController::GameController() { }
 
 GameController::~GameController() { }
 
 void GameController::RunGame() {
-    AssetController::Instance().Initialize(10000000); // Allocate 10MB
-    Renderer* r = &Renderer::Instance();
-    Timing* t = &Timing::Instance();
-    r->Initialize(800, 600);
+    
+    Level* level1 = new Level();
+    level1->AssignNonDefaultValues(Color(128, 128, 128, 255), false, false);
+    level1->RunLevel();
 
-    TTFont* font20 = new TTFont();
-    font20->Initialize(20);
+    
+    ofstream writeStream("level1.bin", ios::out | ios::binary);
+    level1->Serialize(writeStream);
+    writeStream.close();
+    delete level1;
 
-    Point ws = r->GetWindowSize();
+    Level* level1Load = new Level();
+    ifstream readStream("level1.bin", ios::in | ios::binary);
+    level1Load->Deserialize(readStream);
+    readStream.close();
 
-    SpriteSheet::Pool = new ObjectPool<SpriteSheet>();
-    SpriteAnim::Pool = new ObjectPool<SpriteAnim>();
-    SpriteSheet* sheet = SpriteSheet::Pool->GetResource();
-    sheet->Load("../Assets/Textures/Warrior.tga");
-    sheet->SetSize(17, 6, 69, 44);
-    sheet->AddAnimation(EN_AN_IDLE, 0, 6, 6.0f);
-    sheet->AddAnimation(EN_AN_RUN, 6, 8, 6.0f);
+    level1Load->SetAutosaved(true);
+    level1Load->RunLevel();
+    delete level1Load;
 
-    while (m_sdlEvent.type != SDL_QUIT) {
-        t->Tick();
+    Level* level2 = new Level();
+    level2->AssignNonDefaultValues(Color(0, 128, 0, 255), true, false);
+    level2->RunLevel();
 
-        SDL_PollEvent(&m_sdlEvent);
-        r->SetDrawColor(Color(255, 255, 255, 255));
-        r->ClearScreen();
-        r->RenderTexture(sheet, sheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(0, 0, 69 * 3, 44 * 3));
-        r->RenderTexture(sheet, sheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(0, 150, 69 * 3, 150 + 44 * 3));
-        
-        std::string s = "Frame number: " + std::to_string(sheet->GetCurrentClip(EN_AN_IDLE));
-        font20->Write(r->GetRenderer(), s.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 250, 50 });
-        
-        s = "Frame number: " + std::to_string(sheet->GetCurrentClip(EN_AN_RUN));
-        font20->Write(r->GetRenderer(), s.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 250, 200 });
+    ofstream writeStream("level2.bin", ios::out | ios::binary);
+    level2->Serialize(writeStream);
+    writeStream.close();
+    delete level2;
 
-        std::string fps = "Frames Per Second: " + std::to_string(t->GetFPS());
-        font20->Write(r->GetRenderer(), fps.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 0, 0 });
+    Level* level2Load = new Level();
+    ifstream readStream("level2.bin", ios::in | ios::binary);
+    level2Load->Deserialize(readStream);
+    readStream.close();
 
-        SDL_RenderPresent(r->GetRenderer());
-    }
-
-    delete SpriteAnim::Pool;
-    delete SpriteSheet::Pool;
-
-    font20->Shutdown();
-    r->Shutdown();
+    level2Load->SetAutosaved(true);
+    level2Load->RunLevel();
+    delete level2Load;
 }

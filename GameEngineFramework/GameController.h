@@ -12,10 +12,6 @@ public:
 
 	// Methods
 	void RunGame();
-
-private:
-	// Members
-	SDL_Event m_sdlEvent;
 };
 
 #endif
