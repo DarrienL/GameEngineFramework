@@ -50,6 +50,8 @@ void GameController::RunGame() {
         font20->Write(r->GetRenderer(), fps.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 0, 0 });
 
         SDL_RenderPresent(r->GetRenderer());
+
+        t->CapFPS();
     }
 
     delete SpriteAnim::Pool;
