@@ -14,9 +14,9 @@ Renderer::~Renderer() {
     Shutdown();
 }
 
-void Renderer::Initialize(int _xResolution, int _yResolution) {
-    M_ASSERT((SDL_Init(SDL_INIT_EVERYTHING) >= 0), "SDL init failed.");
-    m_window = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _xResolution, _yResolution, SDL_WINDOW_SHOWN);
+void Renderer::Initialize() {
+    M_ASSERT((SDL_Init(SDL_INIT_EVERYTHING) >= 0), "");
+    m_window = SDL_CreateWindow("SDL Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, m_srcRect.w, m_srcRect.y, SDL_WINDOW_FULLSCREEN);
     M_ASSERT(m_window != nullptr, "Failed to initialize SDL window.");
     m_renderer = SDL_CreateRenderer(Renderer::Instance().GetWindow(), -1, 0);
     M_ASSERT(m_renderer != nullptr, "Failed to initalize SDL renderer.");
@@ -147,4 +147,17 @@ void Renderer::RenderTexture(SDL_Texture* _texture, Rect _srcRect, Rect _destRec
     m_srcRect.h = _srcRect.Y2 - _srcRect.Y1;
 
     M_ASSERT(((SDL_RenderCopyEx(m_renderer, _texture, &m_srcRect, &m_destRect, _angle, nullptr, SDL_FLIP_NONE)) >= 0), "Could not render texture");
+}
+
+void Renderer::EnumerateDisplayModes() {
+    int display_count = SDL_GetNumVideoDisplays();
+    for (int display_index = 0; display_index <= display_count; display_index++) {
+        int modes_count = SDL_GetNumDisplayModes(display_index);
+        for (int mode_index = 0; mode_index <= modes_count; mode_index++) {
+            SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+            if (SDL_GetDisplayMode(display_index, mode_index, &mode) == 0) {
+                m_resolutions.push_back(mode);
+            }
+        }
+    }
 }

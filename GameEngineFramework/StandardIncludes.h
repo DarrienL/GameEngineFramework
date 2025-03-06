@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cinttypes>
 #include <stdio.h>
 #include <thread>
