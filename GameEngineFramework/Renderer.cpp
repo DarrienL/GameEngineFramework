@@ -161,3 +161,8 @@ void Renderer::EnumerateDisplayModes() {
         }
     }
 }
+
+void Renderer::ChangeDisplayMode(SDL_DisplayMode* _node) {
+    M_ASSERT(SDL_SetWindowDisplayMode(m_window, _node) == 0, "Failed to set resolution");
+    SDL_SetWindowSize(m_window, _node->w, _node->h);
+}
