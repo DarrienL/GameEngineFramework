@@ -29,9 +29,11 @@ void Renderer::Shutdown() {
     m_textures.clear();
     if (m_renderer != nullptr) {
         SDL_DestroyRenderer(m_renderer);
+        m_renderer = nullptr;
     }
     if (m_window != nullptr) {
         SDL_DestroyWindow(m_window);
+        m_window = nullptr;
     }
     SDL_Quit();
 }
