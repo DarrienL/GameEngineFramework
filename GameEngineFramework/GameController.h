@@ -24,7 +24,7 @@ private:
 	// Members
 	SDL_Event m_sdlEvent;
 	Renderer* m_renderer;
-	TTFont* m_fArial20;
+	TTFont* m_fArial10;
 	bool m_quit;
 	InputController* m_input;
 	string m_text;

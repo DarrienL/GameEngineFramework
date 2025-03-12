@@ -73,6 +73,31 @@ bool Controller::ProcessButtons(SDL_Event _event) {
 	return false;
 }
 
+bool Controller::ProcessMotion(SDL_Event _event) {
+	if (_event.type != SDL_CONTROLLERAXISMOTION) return false;
+
+	for (unsigned int count = 0; count < m_controllers.size(); count++) {
+		if (m_controllers[count].ID != _event.cdevice.which) continue;
+
+		// Left Analog Stick
+		if (_event.caxis.axis == 0) {
+			m_controllers[count].LeftAxis.X = _event.caxis.value;
+		}
+		else if (_event.caxis.axis == 1) {
+			m_controllers[count].LeftAxis.Y = _event.caxis.value;
+		}
+
+		// Right Analog Stick
+		if (_event.caxis.axis == 2) {
+			m_controllers[count].RightAxis.X = _event.caxis.value;
+		}
+		else if (_event.caxis.axis == 3) {
+			m_controllers[count].RightAxis.Y = _event.caxis.value;
+		}
+	}
+	return true;
+}
+
 string Controller::ToString() {
 	int cc = 0;
 	string s = "Controllers: ";

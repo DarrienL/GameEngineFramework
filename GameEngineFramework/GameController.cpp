@@ -13,7 +13,7 @@ GameController::GameController() {
     m_quit = false;
     m_sdlEvent = { };
     m_renderer = nullptr;
-    m_fArial20 = nullptr;
+    m_fArial10 = nullptr;
     m_input = nullptr;
     m_text = "";
     m_smPos = "";
@@ -29,12 +29,12 @@ void GameController::Initialize() {
     m_renderer = &Renderer::Instance();
     m_renderer->Initialize();
     m_input = &InputController::Instance();
-    m_fArial20 = new TTFont();
-    m_fArial20->Initialize(20);
+    m_fArial10 = new TTFont();
+    m_fArial10->Initialize(10);
 }
 
 void GameController::ShutDown() {
-    delete m_fArial20;
+    delete m_fArial10;
 }
 
 void GameController::HandleInput(SDL_Event _event) {
@@ -51,7 +51,7 @@ void GameController::HandleInput(SDL_Event _event) {
     else if (m_input->MS()->Moved(_event, m_mPos)) {
         m_smPos = "Mouse Position [" + to_string(m_mPos.X) + ";" + to_string(m_mPos.Y) + "]";
     }
-    else if ((m_input->CT()->Added(m_sdlEvent)) || (m_input->CT()->Removed(m_sdlEvent)) || (m_input->CT()->ProcessButtons(m_sdlEvent))) {
+    else if ((m_input->CT()->Added(m_sdlEvent)) || (m_input->CT()->Removed(m_sdlEvent)) || (m_input->CT()->ProcessButtons(m_sdlEvent)) || (m_input->CT()->ProcessMotion(m_sdlEvent))) {
         m_ctInfo = m_input->CT()->ToString();
     }
         
@@ -69,12 +69,12 @@ void GameController::RunGame() {
             HandleInput(m_sdlEvent);
         }
 
-        m_fArial20->Write(m_renderer->GetRenderer(), m_text.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 50, 200 });
-        m_fArial20->Write(m_renderer->GetRenderer(), m_smPos.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 220 });
-        m_fArial20->Write(m_renderer->GetRenderer(), ("Left: " + to_string(m_input->MS()->GetButLDown())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 240 });
-        m_fArial20->Write(m_renderer->GetRenderer(), ("Middle: " + to_string(m_input->MS()->GetButMDown())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 260 });
-        m_fArial20->Write(m_renderer->GetRenderer(), ("Right: " + to_string(m_input->MS()->GetButRDown())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 280 });
-        m_fArial20->Write(m_renderer->GetRenderer(), m_ctInfo.c_str(), SDL_Color{ 255, 0, 0 }, SDL_Point{ 50, 300 });
+        m_fArial10->Write(m_renderer->GetRenderer(), m_text.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 50, 200 });
+        m_fArial10->Write(m_renderer->GetRenderer(), m_smPos.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 220 });
+        m_fArial10->Write(m_renderer->GetRenderer(), ("Left: " + to_string(m_input->MS()->GetButLDown())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 240 });
+        m_fArial10->Write(m_renderer->GetRenderer(), ("Middle: " + to_string(m_input->MS()->GetButMDown())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 260 });
+        m_fArial10->Write(m_renderer->GetRenderer(), ("Right: " + to_string(m_input->MS()->GetButRDown())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 50, 280 });
+        m_fArial10->Write(m_renderer->GetRenderer(), m_ctInfo.c_str(), SDL_Color{ 255, 0, 0 }, SDL_Point{ 50, 300 });
 
         SDL_RenderPresent(m_renderer->GetRenderer());
     }

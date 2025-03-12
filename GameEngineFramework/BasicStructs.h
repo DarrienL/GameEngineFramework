@@ -7,6 +7,22 @@
 typedef unsigned char byte;
 #endif
 
+struct Position
+{
+    Position() {
+        X = 0;
+        Y = 0;
+    }
+
+    Position(int _x, int _y) {
+        X = _x;
+        Y = _y;
+    }
+
+    int X;
+    int Y;
+};
+
 struct Color
 {
     Color(byte _r, byte _g, byte _b, byte _a) {
@@ -23,12 +39,15 @@ struct Color
 };
 
 struct Point {
+    Point() {
+        X = 0;
+        Y = 0;
+    }
+
     Point(unsigned int _x, unsigned int _y) {
         X = _x;
         Y = _y;
     }
-
-    Point() {}
 
     unsigned int X;
     unsigned int Y;
