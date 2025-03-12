@@ -58,12 +58,28 @@ bool Controller::Removed(SDL_Event _event) {
 	return true;
 }
 
+bool Controller::ProcessButtons(SDL_Event _event) {
+	if (_event.type == SDL_CONTROLLERBUTTONDOWN) {
+		for (unsigned int count = 0; count < m_controllers.size(); count++) {
+			if (m_controllers[count].ID != _event.cdevice.which) continue;
+			auto v = m_controllers[count].Buttons;
+			if (std::find(v.begin(), v.end(), _event.cbutton.button) == v.end()) {
+				m_controllers[count].Buttons.push_back(SDL_GameControllerButton(_event.cbutton.button));
+			}
+			break;
+		}
+		return true;
+	}
+	return false;
+}
+
 string Controller::ToString() {
 	int cc = 0;
 	string s = "Controllers: ";
 	for (ControllerInfo c : m_controllers) {
 		cc++;
 		s += to_string(cc) + " - " + c.Name + ": ";
+		s += c.ToString();
 	}
 	return s;
 }
