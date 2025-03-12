@@ -28,6 +28,8 @@ struct Point {
         Y = _y;
     }
 
+    Point() {}
+
     unsigned int X;
     unsigned int Y;
 };
