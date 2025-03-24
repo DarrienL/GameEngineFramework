@@ -40,7 +40,7 @@ int main() {
 	SubtractVectors();
 
 	// Multiply Vectors
-	std::cout << "\nultiply Vectors" << std::endl;
+	std::cout << "\nMultiply Vectors" << std::endl;
 	MultiplyVectors();
 
 	return 0;
