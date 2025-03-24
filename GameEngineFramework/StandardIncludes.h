@@ -2,6 +2,7 @@
 #define STANDARD_INCLUDES_H
 
 #define SDL_MAIN_HANDLED
+#define GLM_ENABLE_EXPERIMENTAL
 
 #define NATIVE_XRES 1920
 #define NATIVE_YRES 1080
@@ -25,6 +26,10 @@
 // Project headers
 #include "Singleton.h"
 #include "BasicStructs.h"
+
+// Openg GL/Helper headers
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 // OS specific includes and defines
 #ifdef _WIN32
