@@ -1,13 +1,21 @@
 #include "StandardIncludes.h"
 
-static void Distance() {
-	glm::vec3 p1 = { 1, 1, 0 };
-	glm::vec3 p2 = { 2, 1, 2 };
-	float distance = glm::distance(p1, p2);
-	std::cout << "Distance = " << distance << std::endl;
+int task1(glm::vec3 pos, glm::vec3 dest, float speed) {
+	glm::vec3 dir = dest - pos;
+	dir = glm::normalize(dir);
+	int steps = 0;
+	while (glm::distance(pos, dest) > speed) {
+		pos += (dir * speed);
+		steps++;
+	}
+	return steps;
 }
 
 int main() {
-	Distance();
+	glm::vec3 a = { 3, 0, 8 };
+	glm::vec3 b = { 9, 2, 1 };
+	float s = 0.2f;
+	cout << "It would take " << to_string(task1(a, b, s)) << " steps to reach the destination." << endl;
+
 	return 0;
 }
