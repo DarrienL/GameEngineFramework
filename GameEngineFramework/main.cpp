@@ -8,10 +8,13 @@ int task1(glm::vec3 pos, glm::vec3 dest, float speed) {
 		pos += (dir * speed);
 		steps++;
 	}
+	// While distance between current position and destination is greater than the speed of a step
+	// move a step and increment int steps
 	return steps;
 }
 
 int main() {
+	// Input
 	glm::vec3 a = { 3, 0, 8 };
 	glm::vec3 b = { 9, 2, 1 };
 	float s = 0.2f;
