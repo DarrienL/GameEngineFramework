@@ -1,27 +1,30 @@
 #include "StandardIncludes.h"
 
-float task2Perimeter(glm::vec3 a, glm::vec3 b, glm::vec3 c) {
-	// Calculate perimeter
-	float ab = glm::distance(a, b);
-	float bc = glm::distance(b, c);
-	float ca = glm::distance(c, a);
-	return ab + bc + ca; // Perimeter = sum of all 3 sides (distances between points)
+static void DotProduct() {
+	glm::vec3 source = { 0, 0, 0 };
+	glm::vec3 a = { 0, 2, 0 };
+	glm::vec3 b = { 1, 1, 0 };
+	glm::vec3 aVec = a - source;
+	glm::vec3 bVec = b - source;
+	aVec = glm::normalize(aVec);
+	bVec = glm::normalize(bVec);
+	float dot = glm::dot(aVec, bVec);
+	std::cout << "Dot = " << dot << std::endl;
 }
 
-float task2Area(glm::vec3 a, glm::vec3 b, glm::vec3 c) {
-	// Calculate area
-	glm::vec3 ab = b - a;
-	glm::vec3 ac = c - a;
-	glm::vec3 cross = glm::cross(ab, ac);
-	return 0.5f * glm::length(cross); // Area = 0.5 * magnitude of cross product of 2 sides
+static void CrossProduct() {
+	glm::vec3 source = { 0, 0, 0 };
+	glm::vec3 a = { 0, 2, 0 };
+	glm::vec3 b = { 1, 1, 0 };
+	glm::vec3 aVec = a - source;
+	glm::vec3 bVec = b - source;
+	glm::vec3 cross = glm::cross(aVec, bVec);
+	cross = glm::normalize(cross);
+	std::cout << "Cross = " << glm::to_string(cross) << std::endl;
 }
 
 int main() {
-	// Input
-	glm::vec3 a = { 0, 0, 0 };
-	glm::vec3 b = { 2, 0, 0 };
-	glm::vec3 c = { 0, 2, 0 };
-	cout << "The perimeter of the traingle is " << to_string(task2Perimeter(a, b, c)) << endl;
-	cout << "The area of the traingle is " << to_string(task2Area(a, b, c)) << endl;
+	DotProduct();
+	CrossProduct();
 	return 0;
 }
