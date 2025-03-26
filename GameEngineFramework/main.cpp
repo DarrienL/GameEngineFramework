@@ -1,38 +1,43 @@
 #include "StandardIncludes.h"
 
-vector<glm::vec3> task3(glm::vec3 a, glm::vec3 b, glm::vec3 c, float depth) {
-	// Finding 4th point to complete parallelogram
-	glm::vec3 ab = b - a;
-	glm::vec3 ac = c - a;
-	glm::vec3 d = a + b + c;
-
-	// Extrusion vector (perpendicular to the parallelogram)
-	glm::vec3 depthVec = glm::cross(ab, ac);
-	depthVec = glm::normalize(depthVec);
-
-	// Finding remaining vertices
-	glm::vec3 e = a + (depthVec * depth);
-	glm::vec3 f = b + (depthVec * depth);
-	glm::vec3 g = c + (depthVec * depth);
-	glm::vec3 h = d + (depthVec * depth);
-
-	return { a, b, c, d, e, f, g, h };
-}
-
-
 int main() {
-	// Input
-	glm::vec3 a = { 0, 0, 0 };
-	glm::vec3 b = { 2, 0, 0 };
-	glm::vec3 c = { 0, 2, 0 };
-	float depth = 3.0f;
+	// Declare and initialize identity matrix
+	glm::mat4 matrix1 = glm::mat3(1.0f);
+	cout << "\nIdentity Matrix Initialization" << endl;
+	cout << glm::to_string(matrix1) << endl;
 
-	vector<glm::vec3> vertices = task3(a, b, c, depth);
+	// Matrix addition
+	glm::mat4 matrix2 = { { 1, 1, 1, 1 }, { 2, 2, 2, 2 }, { 3, 3, 3, 3 }, { 4, 4, 4, 4 } };
+	glm::mat4 matrix3 = { { 5, 5, 5, 5 }, { 6, 6, 6, 6 }, { 7, 7, 7, 7 }, { 8, 8, 8, 8 } };
+	cout << "\nMatrix addition" << endl;
+	cout << "Matrix1: " << glm::to_string(matrix2) << endl;
+	cout << "Matrix2: " << glm::to_string(matrix3) << endl;
+	cout << "Add M1 to M2: " << glm::to_string(matrix2 + matrix3) << endl;
 
-	cout << "Vertices of Cuboid:" << endl;
-	for (glm::vec3 vertex : vertices) {
-		cout << glm::to_string(vertex) << endl;
-	}
+	// Matrix subtraction
+	cout << "\nMatrix subtraction" << endl;
+	cout << "Matrix1: " << glm::to_string(matrix2) << endl;
+	cout << "Matrix2: " << glm::to_string(matrix3) << endl;
+	cout << "Subtract M2 from M1: " << glm::to_string(matrix2 - matrix3) << endl;
+
+	// Matrix multiplication 1
+	cout << "\nMatrix multiplication 1" << endl;
+	cout << "Matrix1: " << glm::to_string(matrix2) << endl;
+	cout << "Matrix2: " << glm::to_string(matrix3) << endl;
+	cout << "Multiply M1 and M2: " << glm::to_string(matrix2 * matrix3) << endl;
+
+	// Matrix multiplication 2
+	cout << "\nMatrix multiplication 2" << endl;
+	cout << "Matrix1: " << glm::to_string(matrix2) << endl;
+	cout << "Matrix2: " << glm::to_string(matrix3) << endl;
+	cout << "Multiply M2 and M1: " << glm::to_string(matrix3 * matrix2) << endl;
+
+	// Matrix multiplication commutative example
+	cout << "\nMatrix multiplication commutative example" << endl;
+	cout << "Matrix1: " << glm::to_string(matrix1) << endl;
+	cout << "Matrix2: " << glm::to_string(matrix3) << endl;
+	cout << "Multiply M1 and M2: " << glm::to_string(matrix1 * matrix3) << endl;
+	cout << "Multiply M2 and M1: " << glm::to_string(matrix3 * matrix1) << endl;
 
 	return 0;
 }
