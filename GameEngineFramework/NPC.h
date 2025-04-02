@@ -20,6 +20,7 @@ public:
 	void SetTagged(bool _tagged);
 	float GetTaggedTimer();
 	void SetSpeed(float _speed);
+	float GetOrientation();
 
 	static ObjectPool<NPC>* Pool;
 
@@ -30,6 +31,7 @@ private:
 	bool m_facingLeft;
 	bool m_tagged;
 	float m_taggedTimer;
+	float m_orientation;
 };
 
 #endif

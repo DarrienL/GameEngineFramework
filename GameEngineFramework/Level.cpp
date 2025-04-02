@@ -261,45 +261,45 @@ void Level::RunLevel() {
 
 		if (m_isMoving) {
 			if (m_player->IsFacingLeft()) {
-				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180);
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180, SDL_FLIP_NONE);
 			}
 			else {
-				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 0, SDL_FLIP_VERTICAL);
 			}
 		}
 		else {
 			if (m_player->IsFacingLeft()) {
-				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180);
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180, SDL_FLIP_NONE);
 			}
 			else {
-				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 0, SDL_FLIP_VERTICAL);
 			}
 		}
 		
 		for (int i = 0; i < m_npcs.size(); i++) {
 			if (m_npcs[i]->IsTagged() && m_npcs[i]->GetTaggedTimer() < 1.0f) {
 				if (m_npcs[i]->IsFacingLeft()) {
-					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180);
+					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180, SDL_FLIP_NONE);
 				}
 				else {
-					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 0, SDL_FLIP_VERTICAL);
 				}
 			}
 			else {
 				if (m_isMoving) {
 					if (m_npcs[i]->IsFacingLeft()) {
-						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180);
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180 + m_npcs[i]->GetOrientation(), SDL_FLIP_NONE);
 					}
 					else {
-						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), m_npcs[i]->GetOrientation(), SDL_FLIP_VERTICAL);
 					}
 				}
 				else {
 					if (m_npcs[i]->IsFacingLeft()) {
-						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180);
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180 + m_npcs[i]->GetOrientation(), SDL_FLIP_NONE);
 					}
 					else {
-						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), m_npcs[i]->GetOrientation(), SDL_FLIP_VERTICAL);
 					}
 				}
 			}

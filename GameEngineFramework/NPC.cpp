@@ -9,6 +9,7 @@ NPC::NPC() {
     m_facingLeft = 0;
     m_tagged = 0;
     m_taggedTimer = 0.0f;
+    m_orientation = 0.0f;
 }
 
 NPC::~NPC() {
@@ -59,6 +60,7 @@ void NPC::Update(float deltaTime, glm::vec2 playerPos) {
         else if (glm::length(direction) > 160) {
             m_pos += glm::normalize(direction) * m_speed * deltaTime;
         }
+        m_orientation = acos(glm::dot({ 0, 0 }, direction));
     }
     else {
         if (m_taggedTimer < 1.0f) {
@@ -95,4 +97,8 @@ float NPC::GetTaggedTimer() {
 
 void NPC::SetSpeed(float _speed) {
     m_speed = _speed;
+}
+
+float NPC::GetOrientation() {
+    return m_orientation;
 }
