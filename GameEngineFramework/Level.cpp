@@ -51,8 +51,8 @@ Level::~Level() {
 void Level::SetDefaultValues(int _numberOfNPCs) {
 	srand(static_cast<unsigned>(time(nullptr)));
 	
-	m_playerSpeed = 100.0f;
-	m_NPCSpeed = 60.0f;
+	m_playerSpeed = 1000.0f;
+	m_NPCSpeed = 600.0f;
 	m_playerScale = 1.25f;
 	m_NPCScale = 1.25f;
 	m_numberOfNPCs = 10;
@@ -71,6 +71,7 @@ void Level::SetDefaultValues(int _numberOfNPCs) {
 		glm::vec2 direction = centre - startingPos;
 		if (glm::length(centre - startingPos) > 150) {
 			startingPos = glm::normalize(startingPos) * 150;
+			startingPos += centre;
 		}
 		npc->AssignValues(startingPos, m_NPCSpeed, m_NPCScale);
 		m_npcs.push_back(npc);
@@ -134,8 +135,8 @@ void Level::HandleInput(SDL_Event _event, float deltaTime) {
 		m_quit = true;
 	}
 	else if (m_input->KB()->KeyUp(_event, SDLK_i)) {
-		if (m_NPCSpeed < 60) {
-			m_NPCSpeed += 10;
+		if (m_NPCSpeed < 600) {
+			m_NPCSpeed += 100;
 			for (int i = 0; i < m_npcs.size(); i++) {
 				m_npcs[i]->SetSpeed(m_NPCSpeed);
 			}
@@ -143,7 +144,7 @@ void Level::HandleInput(SDL_Event _event, float deltaTime) {
 	}
 	else if (m_input->KB()->KeyUp(_event, SDLK_d)) {
 		if (m_NPCSpeed > 0) {
-			m_NPCSpeed -= 10;
+			m_NPCSpeed -= 100;
 			for (int i = 0; i < m_npcs.size(); i++) {
 				m_npcs[i]->SetSpeed(m_NPCSpeed);
 			}
@@ -159,16 +160,16 @@ void Level::HandleInput(SDL_Event _event, float deltaTime) {
 		Deserialize(readStream);
 		readStream.close();
 	}
-	else if (m_input->KB()->KeyUp(_event, SDLK_UP)) {
+	else if (m_input->KB()->KeyDown(_event, SDLK_UP)) {
 		m_player->MoveUp(deltaTime);
 	}
-	else if (m_input->KB()->KeyUp(_event, SDLK_DOWN)) {
+	else if (m_input->KB()->KeyDown(_event, SDLK_DOWN)) {
 		m_player->MoveDown(deltaTime);
 	}
-	else if (m_input->KB()->KeyUp(_event, SDLK_LEFT)) {
+	else if (m_input->KB()->KeyDown(_event, SDLK_LEFT)) {
 		m_player->MoveLeft(deltaTime);
 	}
-	else if (m_input->KB()->KeyUp(_event, SDLK_RIGHT)) {
+	else if (m_input->KB()->KeyDown(_event, SDLK_RIGHT)) {
 		m_player->MoveRight(deltaTime);
 	}
 }
@@ -192,14 +193,13 @@ void Level::RunLevel() {
 	SpriteSheet* warriorSheet = SpriteSheet::Pool->GetResource();
 	warriorSheet->Load("../Assets/Textures/Warrior.tga");
 	warriorSheet->SetSize(17, 6, 69, 44);
-	warriorSheet->AddAnimation(EN_AN_RUN, 6, 8, 6);
-	warriorSheet->AddAnimation(EN_AN_DEATH, 26, 11, 6);
+	warriorSheet->AddAnimation(EN_AN_RUN, 6, 8, 1);
+	warriorSheet->AddAnimation(EN_AN_DEATH, 26, 11, 1);
 
 	// Game Loop
 	while (!m_quit) {
 		t->Tick();
 
-		SDL_PollEvent(&m_sdlEvent);
 		m_renderer->SetDrawColor(Color(255, 255, 255, 255));
 		m_renderer->ClearScreen();
 
@@ -226,7 +226,7 @@ void Level::RunLevel() {
 			}
 		}
 
-		if (m_numberOfNPCs <= 0) {
+		if (m_npcs.size() <= 0) {
 			m_quit = 1;
 		}
 
@@ -237,16 +237,20 @@ void Level::RunLevel() {
 		string keyPressInfoTest = "[D]ecrease speed [I]ncrease speed [S]ave [L]oad [ESC] Quit";
 		m_fArial20->Write(m_renderer->GetRenderer(), keyPressInfoTest.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 100, 20 });
 
-		string playerSpeedText = "Player speed: " + to_string(m_playerSpeed);
+		string playerSpeedText = "Player speed: " + to_string(m_playerSpeed/10);
 		m_fArial20->Write(m_renderer->GetRenderer(), playerSpeedText.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 100, 40 });
 
-		string enemySpeedText = "Enemy speed: " + to_string(m_NPCSpeed);
+		string enemySpeedText = "Enemy speed: " + to_string(m_NPCSpeed/10);
 		m_fArial20->Write(m_renderer->GetRenderer(), enemySpeedText.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 100, 60 });
 
 		string enemiesTaggedText = "Enemies tagged: " + to_string(m_enemiesTagged);
 		m_fArial20->Write(m_renderer->GetRenderer(), enemiesTaggedText.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 100, 80 });
 
 		m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+
+		for (int i = 0; i < m_npcs.size(); i++) {
+			m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+		}
 
 		SDL_RenderPresent(m_renderer->GetRenderer());
 		t->CapFPS();
