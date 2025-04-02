@@ -44,6 +44,7 @@ private:
 	float m_NPCScale;
 	int m_numberOfNPCs;
 	int m_enemiesTagged;
+	bool m_isMoving;
 
 	Player* m_player;
 	vector<NPC*> m_npcs;

@@ -27,6 +27,7 @@ Level::Level() {
 	m_NPCScale = 0.0f;
 	m_numberOfNPCs = 0;
 	m_enemiesTagged = 0;
+	m_isMoving = false;
 
 	m_player = nullptr;
 	m_npcs.clear();
@@ -57,6 +58,7 @@ void Level::SetDefaultValues(int _numberOfNPCs) {
 	m_NPCScale = 1.25f;
 	m_numberOfNPCs = 10;
 	m_enemiesTagged = 0;
+	m_isMoving = false;
 
 	glm::vec2 centre = { 960, 540 };
 
@@ -160,17 +162,25 @@ void Level::HandleInput(SDL_Event _event, float deltaTime) {
 		Deserialize(readStream);
 		readStream.close();
 	}
-	else if (m_input->KB()->KeyDown(_event, SDLK_UP)) {
+
+	if (m_input->KB()->KeyDown(_event, SDLK_UP)) {
 		m_player->MoveUp(deltaTime);
+		m_isMoving = true;
 	}
 	else if (m_input->KB()->KeyDown(_event, SDLK_DOWN)) {
 		m_player->MoveDown(deltaTime);
+		m_isMoving = true;
 	}
 	else if (m_input->KB()->KeyDown(_event, SDLK_LEFT)) {
 		m_player->MoveLeft(deltaTime);
+		m_isMoving = true;
 	}
 	else if (m_input->KB()->KeyDown(_event, SDLK_RIGHT)) {
 		m_player->MoveRight(deltaTime);
+		m_isMoving = true;
+	}
+	else {
+		m_isMoving = false;
 	}
 }
 
@@ -193,8 +203,11 @@ void Level::RunLevel() {
 	SpriteSheet* warriorSheet = SpriteSheet::Pool->GetResource();
 	warriorSheet->Load("../Assets/Textures/Warrior.tga");
 	warriorSheet->SetSize(17, 6, 69, 44);
+	warriorSheet->AddAnimation(EN_AN_IDLE, 0, 6, 1);
 	warriorSheet->AddAnimation(EN_AN_RUN, 6, 8, 1);
 	warriorSheet->AddAnimation(EN_AN_DEATH, 26, 11, 1);
+
+	int totalEnemies = m_numberOfNPCs;
 
 	// Game Loop
 	while (!m_quit) {
@@ -226,7 +239,7 @@ void Level::RunLevel() {
 			}
 		}
 
-		if (m_npcs.size() <= 0) {
+		if (m_enemiesTagged >= totalEnemies) {
 			m_quit = 1;
 		}
 
@@ -246,10 +259,25 @@ void Level::RunLevel() {
 		string enemiesTaggedText = "Enemies tagged: " + to_string(m_enemiesTagged);
 		m_fArial20->Write(m_renderer->GetRenderer(), enemiesTaggedText.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 100, 80 });
 
-		m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
-
+		if (m_isMoving) {
+			m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+		}
+		else {
+			m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+		}
+		
 		for (int i = 0; i < m_npcs.size(); i++) {
-			m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+			if (m_npcs[i]->IsTagged() && m_npcs[i]->GetTaggedTimer() < 1.0f) {
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+			}
+			else {
+				if (m_isMoving) {
+					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+				}
+				else {
+					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+				}
+			}
 		}
 
 		SDL_RenderPresent(m_renderer->GetRenderer());
