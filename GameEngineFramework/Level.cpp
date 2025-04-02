@@ -260,22 +260,47 @@ void Level::RunLevel() {
 		m_fArial20->Write(m_renderer->GetRenderer(), enemiesTaggedText.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 100, 80 });
 
 		if (m_isMoving) {
-			m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+			if (m_player->IsFacingLeft()) {
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180);
+			}
+			else {
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+			}
 		}
 		else {
-			m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+			if (m_player->IsFacingLeft()) {
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180);
+			}
+			else {
+				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
+			}
 		}
 		
 		for (int i = 0; i < m_npcs.size(); i++) {
 			if (m_npcs[i]->IsTagged() && m_npcs[i]->GetTaggedTimer() < 1.0f) {
-				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+				if (m_npcs[i]->IsFacingLeft()) {
+					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180);
+				}
+				else {
+					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+				}
 			}
 			else {
 				if (m_isMoving) {
-					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+					if (m_npcs[i]->IsFacingLeft()) {
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180);
+					}
+					else {
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+					}
 				}
 				else {
-					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+					if (m_npcs[i]->IsFacingLeft()) {
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180);
+					}
+					else {
+						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale));
+					}
 				}
 			}
 		}
