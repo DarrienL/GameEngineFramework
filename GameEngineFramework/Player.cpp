@@ -1,5 +1,7 @@
 #include "Player.h"
 
+ObjectPool<Player>* Player::Pool;
+
 Player::Player() {
     m_pos = { 0, 0 };
     m_speed = 0.0f;

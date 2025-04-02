@@ -36,7 +36,7 @@ private:
 	TTFont* m_fArial20;
 	InputController* m_input;
 	AudioController* m_audio;
-	SoundEffect* m_effects[10];
+	SoundEffect* m_effect;
 
 	float m_playerSpeed;
 	float m_NPCSpeed;

@@ -19,7 +19,7 @@ Level::Level() {
 	m_fArial20 = nullptr;
 	m_input = nullptr;
 	m_audio = nullptr;
-	memset(m_effects, 0, sizeof(SoundEffect*) * MaxEffectChannels);
+	m_effect = nullptr;
 
 	m_playerSpeed = 0.0f;
 	m_NPCSpeed = 0.0f;
@@ -37,9 +37,14 @@ Level::Level() {
 Level::~Level() {
 	m_npcs.clear();
 	delete NPC::Pool;
-	delete m_player;
-	delete m_effects;
-	delete m_fArial20;
+	if (m_player) {
+		delete m_player;
+		m_player = nullptr;
+	}
+	if (m_fArial20) {
+		delete m_fArial20;
+		m_fArial20 = nullptr;
+	}
 	AssetController::Instance().Clear();
 }
 
@@ -95,12 +100,11 @@ void Level::Deserialize(std::istream& _stream) {
 	_stream.read(reinterpret_cast<char*>(&m_NPCScale), sizeof(m_NPCScale));
 	_stream.read(reinterpret_cast<char*>(&m_numberOfNPCs), sizeof(m_numberOfNPCs));
 	_stream.read(reinterpret_cast<char*>(&m_enemiesTagged), sizeof(m_enemiesTagged));
-	Player* m_player;
 	DeserializePointer(_stream, m_player);
 	int numberofNPCS;
 	_stream.read(reinterpret_cast<char*>(&numberofNPCS), sizeof(numberofNPCS));
 	for (int count = 0; count < numberofNPCS; count++) {
-		NPC* npc;
+		NPC* npc = NPC::Pool->GetResource();
 		DeserializePointer(_stream, npc);
 		m_npcs.push_back(npc);
 	}
@@ -132,7 +136,7 @@ void Level::HandleInput(SDL_Event _event, float deltaTime) {
 	else if (m_input->KB()->KeyUp(_event, SDLK_i)) {
 		if (m_NPCSpeed < 60) {
 			m_NPCSpeed += 10;
-			for (int i; i < m_npcs.size(); i++) {
+			for (int i = 0; i < m_npcs.size(); i++) {
 				m_npcs[i]->SetSpeed(m_NPCSpeed);
 			}
 		}
@@ -140,7 +144,7 @@ void Level::HandleInput(SDL_Event _event, float deltaTime) {
 	else if (m_input->KB()->KeyUp(_event, SDLK_d)) {
 		if (m_NPCSpeed > 0) {
 			m_NPCSpeed -= 10;
-			for (int i; i < m_npcs.size(); i++) {
+			for (int i = 0; i < m_npcs.size(); i++) {
 				m_npcs[i]->SetSpeed(m_NPCSpeed);
 			}
 		}
@@ -179,18 +183,17 @@ void Level::RunLevel() {
 	m_input = &InputController::Instance();
 	m_audio = &AudioController::Instance();
 
-	m_effects[0] = m_audio->LoadEffect("../Assets/Audio/Effects/Whoosh.wav");
+	m_effect = m_audio->LoadEffect("../Assets/Audio/Effects/Whoosh.wav");
 
 	// Object Pools
 	SpriteSheet::Pool = new ObjectPool<SpriteSheet>();
 	SpriteAnim::Pool = new ObjectPool<SpriteAnim>();
 
-	// Warrior Sprite Sheet with Different Animation Speeds
 	SpriteSheet* warriorSheet = SpriteSheet::Pool->GetResource();
 	warriorSheet->Load("../Assets/Textures/Warrior.tga");
 	warriorSheet->SetSize(17, 6, 69, 44);
-	warriorSheet->AddAnimation(EN_AN_RUN, 6, 8, 1);
-	warriorSheet->AddAnimation(EN_AN_DEATH, 26, 11, 1);
+	warriorSheet->AddAnimation(EN_AN_RUN, 6, 8, 6);
+	warriorSheet->AddAnimation(EN_AN_DEATH, 26, 11, 6);
 
 	// Game Loop
 	while (!m_quit) {
@@ -204,18 +207,18 @@ void Level::RunLevel() {
 			HandleInput(m_sdlEvent, t->GetDeltaTime());
 		}
 
-		for (int i; i < m_npcs.size(); i++) {
+		for (int i = 0; i < m_npcs.size(); i++) {
 			if (!m_npcs[i]->IsTagged()) {
 				glm::vec2 distance = m_npcs[i]->GetPos() - m_player->GetPos();
 				if (glm::length(distance) < 30) {
 					m_npcs[i]->SetTagged(true);
-					m_audio->Play(m_effects[0]);
+					m_audio->Play(m_effect);
 					m_enemiesTagged++;
 				}
 			}
 		}
 
-		for (int i; i < m_npcs.size(); i++) {
+		for (int i = 0; i < m_npcs.size(); i++) {
 			if (m_npcs[i]->IsTagged()) {
 				if (m_npcs[i]->GetTaggedTimer() >= 1.0f) {
 					m_numberOfNPCs--;
@@ -223,11 +226,11 @@ void Level::RunLevel() {
 			}
 		}
 
-		if (m_numberOfNPCs >= 0) {
+		if (m_numberOfNPCs <= 0) {
 			m_quit = 1;
 		}
 
-		for (int i; i < m_npcs.size(); i++) {
+		for (int i = 0; i < m_npcs.size(); i++) {
 			m_npcs[i]->Update(t->GetDeltaTime(), m_player->GetPos());
 		}
 
@@ -246,6 +249,7 @@ void Level::RunLevel() {
 		m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale));
 
 		SDL_RenderPresent(m_renderer->GetRenderer());
+		t->CapFPS();
 	}
 
 	delete SpriteAnim::Pool;

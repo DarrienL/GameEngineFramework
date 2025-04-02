@@ -20,6 +20,8 @@ public:
 	glm::vec2 GetPos();
 	bool IsFacingLeft();
 
+	static ObjectPool<Player>* Pool;
+
 private:
 	glm::vec2 m_pos;
 	float m_speed;
