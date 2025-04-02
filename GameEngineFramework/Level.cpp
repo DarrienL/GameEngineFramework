@@ -49,6 +49,7 @@ Level::~Level() {
 	AssetController::Instance().Clear();
 }
 
+// Apply changeable values 
 void Level::SetDefaultValues(int _numberOfNPCs) {
 	srand(static_cast<unsigned>(time(nullptr)));
 	
@@ -65,6 +66,7 @@ void Level::SetDefaultValues(int _numberOfNPCs) {
 	m_player = new Player();
 	m_player->AssignValues(centre, m_playerSpeed, m_playerScale);
 
+	// Initialize NPC objects with random positions (max 150 away from centre)
 	for (int i = 0; i < m_numberOfNPCs; i++) {
 		NPC* npc = NPC::Pool->GetResource();
 		float npcX = Level::GetRandomFloat(0.0f, 1920.0f);
@@ -132,59 +134,61 @@ float Level::GetRandomFloat(float min, float max) {
 	return min + static_cast<float>(rand()) / RAND_MAX * (max - min);
 }
 
+// Handle input using events
 void Level::HandleInput(SDL_Event _event, float deltaTime) {
 	if ((m_sdlEvent.type == SDL_QUIT) || (m_input->KB()->KeyUp(_event, SDLK_ESCAPE))) {
-		m_quit = true;
+		m_quit = true; // Quit game
 	}
 	else if (m_input->KB()->KeyUp(_event, SDLK_i)) {
-		if (m_NPCSpeed < 600) {
-			m_NPCSpeed += 100;
-			for (int i = 0; i < m_npcs.size(); i++) {
+		if (m_NPCSpeed < 600) { // If NPC speed less than 600
+			m_NPCSpeed += 100; // Add 100
+			for (int i = 0; i < m_npcs.size(); i++) { // Change speed of all NPCs to new value
 				m_npcs[i]->SetSpeed(m_NPCSpeed);
 			}
 		}
 	}
 	else if (m_input->KB()->KeyUp(_event, SDLK_d)) {
-		if (m_NPCSpeed > 0) {
-			m_NPCSpeed -= 100;
-			for (int i = 0; i < m_npcs.size(); i++) {
+		if (m_NPCSpeed > 0) { // If NPC speed greater than 0
+			m_NPCSpeed -= 100; // Subtract 100
+			for (int i = 0; i < m_npcs.size(); i++) { // Change speed of all NPCs to new value
 				m_npcs[i]->SetSpeed(m_NPCSpeed);
 			}
 		}
 	}
-	else if (m_input->KB()->KeyUp(_event, SDLK_s)) {
+	else if (m_input->KB()->KeyUp(_event, SDLK_s)) { // Save
 		ofstream writeStream("level.bin", ios::out | ios::binary);
 		Serialize(writeStream);
 		writeStream.close();
 	}
-	else if (m_input->KB()->KeyUp(_event, SDLK_l)) {
+	else if (m_input->KB()->KeyUp(_event, SDLK_l)) { // Load
 		ifstream readStream("level.bin", ios::in | ios::binary);
 		Deserialize(readStream);
 		readStream.close();
 	}
 
-	if (m_input->KB()->KeyDown(_event, SDLK_UP)) {
+	if (m_input->KB()->KeyDown(_event, SDLK_UP)) { // Move player up
 		m_player->MoveUp(deltaTime);
 		m_isMoving = true;
 	}
-	else if (m_input->KB()->KeyDown(_event, SDLK_DOWN)) {
+	else if (m_input->KB()->KeyDown(_event, SDLK_DOWN)) { // Move player down
 		m_player->MoveDown(deltaTime);
 		m_isMoving = true;
 	}
-	else if (m_input->KB()->KeyDown(_event, SDLK_LEFT)) {
+	else if (m_input->KB()->KeyDown(_event, SDLK_LEFT)) { // Move player left
 		m_player->MoveLeft(deltaTime);
 		m_isMoving = true;
 	}
-	else if (m_input->KB()->KeyDown(_event, SDLK_RIGHT)) {
+	else if (m_input->KB()->KeyDown(_event, SDLK_RIGHT)) { // Move player right
 		m_player->MoveRight(deltaTime);
 		m_isMoving = true;
 	}
-	else {
+	else { // If no movement keys are being pressed, set isMoving to false
 		m_isMoving = false;
 	}
 }
 
 void Level::RunLevel() {
+	// Initialize singletons and font
 	m_renderer = &Renderer::Instance();
 	Timing* t = &Timing::Instance();
 	m_renderer->Initialize();
@@ -200,6 +204,7 @@ void Level::RunLevel() {
 	SpriteSheet::Pool = new ObjectPool<SpriteSheet>();
 	SpriteAnim::Pool = new ObjectPool<SpriteAnim>();
 
+	// Add sprite sheet and add animations
 	SpriteSheet* warriorSheet = SpriteSheet::Pool->GetResource();
 	warriorSheet->Load("../Assets/Textures/Warrior.tga");
 	warriorSheet->SetSize(17, 6, 69, 44);
@@ -220,6 +225,7 @@ void Level::RunLevel() {
 			HandleInput(m_sdlEvent, t->GetDeltaTime());
 		}
 
+		// Check if player is within 30 units of untagged NPC
 		for (int i = 0; i < m_npcs.size(); i++) {
 			if (!m_npcs[i]->IsTagged()) {
 				glm::vec2 distance = m_npcs[i]->GetPos() - m_player->GetPos();
@@ -231,22 +237,17 @@ void Level::RunLevel() {
 			}
 		}
 
-		for (int i = 0; i < m_npcs.size(); i++) {
-			if (m_npcs[i]->IsTagged()) {
-				if (m_npcs[i]->GetTaggedTimer() >= 1.0f) {
-					m_numberOfNPCs--;
-				}
-			}
-		}
-
+		// If number of enemies tagged is greater than or equal to total enemies (set before game loop), quit game
 		if (m_enemiesTagged >= totalEnemies) {
 			m_quit = 1;
 		}
 
+		// Update npcs every loop
 		for (int i = 0; i < m_npcs.size(); i++) {
 			m_npcs[i]->Update(t->GetDeltaTime(), m_player->GetPos());
 		}
 
+		// Top left text
 		string keyPressInfoTest = "[D]ecrease speed [I]ncrease speed [S]ave [L]oad [ESC] Quit";
 		m_fArial20->Write(m_renderer->GetRenderer(), keyPressInfoTest.c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 100, 20 });
 
@@ -259,7 +260,8 @@ void Level::RunLevel() {
 		string enemiesTaggedText = "Enemies tagged: " + to_string(m_enemiesTagged);
 		m_fArial20->Write(m_renderer->GetRenderer(), enemiesTaggedText.c_str(), SDL_Color{ 0, 255, 0 }, SDL_Point{ 100, 80 });
 
-		if (m_isMoving) {
+		// Render player warrior
+		if (m_isMoving) { // If moving, use run animation
 			if (m_player->IsFacingLeft()) {
 				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180, SDL_FLIP_NONE);
 			}
@@ -267,7 +269,7 @@ void Level::RunLevel() {
 				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 0, SDL_FLIP_VERTICAL);
 			}
 		}
-		else {
+		else { // If not moving, use idle animation
 			if (m_player->IsFacingLeft()) {
 				m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_player->GetPos().x, m_player->GetPos().y, m_player->GetPos().x + 69 * m_playerScale, m_player->GetPos().y + 44 * m_playerScale), 180, SDL_FLIP_NONE);
 			}
@@ -276,8 +278,9 @@ void Level::RunLevel() {
 			}
 		}
 		
+		// Render NPC warrior
 		for (int i = 0; i < m_npcs.size(); i++) {
-			if (m_npcs[i]->IsTagged() && m_npcs[i]->GetTaggedTimer() < 1.0f) {
+			if (m_npcs[i]->IsTagged() && m_npcs[i]->GetTaggedTimer() < 1.0f) { // If NPC is tagged and tag timer is less than 1.0, use death animation
 				if (m_npcs[i]->IsFacingLeft()) {
 					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180, SDL_FLIP_NONE);
 				}
@@ -285,8 +288,8 @@ void Level::RunLevel() {
 					m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_DEATH, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 0, SDL_FLIP_VERTICAL);
 				}
 			}
-			else {
-				if (m_isMoving) {
+			else { // If NPC is not tagged use other animation
+				if (m_isMoving) { // If moving, use run animation
 					if (m_npcs[i]->IsFacingLeft()) {
 						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180 + m_npcs[i]->GetOrientation(), SDL_FLIP_NONE);
 					}
@@ -294,7 +297,7 @@ void Level::RunLevel() {
 						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_RUN, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), m_npcs[i]->GetOrientation(), SDL_FLIP_VERTICAL);
 					}
 				}
-				else {
+				else { // If not moving, use idle animation
 					if (m_npcs[i]->IsFacingLeft()) {
 						m_renderer->RenderTexture(warriorSheet, warriorSheet->Update(EN_AN_IDLE, t->GetDeltaTime()), Rect(m_npcs[i]->GetPos().x, m_npcs[i]->GetPos().y, m_npcs[i]->GetPos().x + 69 * m_NPCScale, m_npcs[i]->GetPos().y + 44 * m_NPCScale), 180 + m_npcs[i]->GetOrientation(), SDL_FLIP_NONE);
 					}
@@ -306,7 +309,7 @@ void Level::RunLevel() {
 		}
 
 		SDL_RenderPresent(m_renderer->GetRenderer());
-		t->CapFPS();
+		t->CapFPS(); // Cap FPS at 80
 	}
 
 	delete SpriteAnim::Pool;
