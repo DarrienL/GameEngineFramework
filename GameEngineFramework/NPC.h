@@ -18,7 +18,10 @@ public:
 	bool IsFacingLeft();
 	bool IsTagged();
 	void SetTagged(bool _tagged);
-	int GetTaggedCount();
+	float GetTaggedTimer();
+	void SetSpeed(float _speed);
+
+	static ObjectPool<NPC>* Pool;
 
 private:
 	glm::vec2 m_pos;

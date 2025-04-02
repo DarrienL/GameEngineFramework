@@ -1,5 +1,7 @@
 #include "NPC.h"
 
+ObjectPool<NPC>* NPC::Pool;
+
 NPC::NPC() {
     m_pos = { 0, 0 };
     m_speed = 0.0f;
@@ -87,6 +89,10 @@ void NPC::SetTagged(bool _tagged) {
     m_tagged = _tagged;
 }
 
-int NPC::GetTaggedCount() {
+float NPC::GetTaggedTimer() {
     return m_taggedTimer;
+}
+
+void NPC::SetSpeed(float _speed) {
+    m_speed = _speed;
 }
