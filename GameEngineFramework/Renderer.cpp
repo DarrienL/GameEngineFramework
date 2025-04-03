@@ -120,7 +120,7 @@ void Renderer::RenderTexture(Texture* _texture, Rect _rect) {
         NULL, &m_destRect, 0, NULL, SDL_FLIP_VERTICAL)) >= 0), "Could not render texture");
 }
 
-void Renderer::RenderTexture(Texture* _texture, Rect _srcRect, Rect _destRect) {
+void Renderer::RenderTexture(Texture* _texture, Rect _srcRect, Rect _destRect, int _alpha) {
     m_destRect.x = _destRect.X1;
     m_destRect.y = _destRect.Y1;
     m_destRect.w = _destRect.X2 - _destRect.X1;
@@ -131,8 +131,10 @@ void Renderer::RenderTexture(Texture* _texture, Rect _srcRect, Rect _destRect) {
     m_srcRect.w = _srcRect.X2 - _srcRect.X1;
     m_srcRect.h = _srcRect.Y2 - _srcRect.Y1;
 
-    M_ASSERT(((SDL_RenderCopyEx(m_renderer, GetSDLTexture(_texture),
-        &m_srcRect, &m_destRect, 0, nullptr, SDL_FLIP_VERTICAL)) >= 0), "Could not render texture");
+    SDL_Texture* tex = GetSDLTexture(_texture);
+    SDL_SetTextureAlphaMod(tex, _alpha);
+    M_ASSERT(((SDL_RenderCopyEx(m_renderer, tex, &m_srcRect, &m_destRect, 0, 
+        nullptr, SDL_FLIP_VERTICAL)) >= 0), "Could not render texture");
 }
 
 void Renderer::RenderTexture(SDL_Texture* _texture, Rect _srcRect, Rect _destRect, double _angle) {
