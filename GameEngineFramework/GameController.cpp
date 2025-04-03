@@ -6,6 +6,9 @@
 #include "Mouse.h"
 #include "Timing.h"
 #include "PhysicsController.h"
+#include "SpriteSheet.h"
+#include "SpriteAnim.h"
+#include "RigidBody.h"
 
 GameController::GameController() {
     m_quit = false;
@@ -15,6 +18,7 @@ GameController::GameController() {
     m_input = nullptr;
     m_timing = nullptr;
     m_physics = nullptr;
+    m_circle = nullptr;
 }
 
 GameController::~GameController() { 
@@ -30,10 +34,31 @@ void GameController::Initialize() {
     m_fArial20->Initialize(20);
     m_timing = &Timing::Instance();
     m_physics = &PhysicsController::Instance();
+
+    SpriteSheet::Pool = new ObjectPool<SpriteSheet>();
+    SpriteAnim::Pool = new ObjectPool<SpriteAnim>();
+    m_circle = SpriteSheet::Pool->GetResource();
+    m_circle->Load("../Assets/Texture/Circle.tga");
+    m_circle->SetSize(1, 1, 32, 32);
+    m_circle->AddAnimation(EN_AN_IDLE, 0, 1, 0.0f);
+    m_circle->SetBlendMode(SDL_BLENDMODE_BLEND);
 }
 
 void GameController::ShutDown() {
-    delete m_fArial20;
+    if (m_fArial20 != nullptr) {
+        delete m_fArial20;
+        m_fArial20 = nullptr;
+    }
+
+    if (SpriteAnim::Pool != nullptr) {
+        delete SpriteAnim::Pool;
+        SpriteAnim::Pool = nullptr;
+    }
+
+    if (SpriteSheet::Pool != nullptr) {
+        delete SpriteSheet::Pool;
+        SpriteSheet::Pool = nullptr;
+    }
 }
 
 void GameController::HandleInput(SDL_Event _event) {
@@ -41,8 +66,12 @@ void GameController::HandleInput(SDL_Event _event) {
     if ((m_sdlEvent.type == SDL_QUIT) || (m_input->KB()->KeyUp(_event, SDLK_ESCAPE))) {
         m_quit = true;
     }
-    else if (m_input->KB()->KeyUp(_event, SDLK_a)) {
-        m_physics->AddParticle(glm::vec2{ 300 + rand() % 400, 200}, 3 + rand() % 5);
+    else if (m_input->KB()->KeyDown(_event, SDLK_a)) {
+        glm::vec2 pos = glm::vec2{ 16 + rand() % (1920 - 32), 16 + rand() % (1080 - 32) };
+        glm::vec2 dest = glm::vec2{ rand() % 1920, rand() % 1080 };
+        glm::vec2 dir = dest - pos;
+        dir = glm::normalize(dir) * 200.0f;
+        m_physics->AddRigidBody(pos, dir, rand() % 128);
     }
         
     m_input->MS()->ProcessButtons(_event);
@@ -62,13 +91,9 @@ void GameController::RunGame() {
         }
 
         m_physics->Update(m_timing->GetDeltaTime());
-        for (Particle* p : m_physics->GetParticles()) {
-            m_renderer->SetDrawColor(Color(0, 0, 0, 255));
-            m_renderer->RenderPoint(Point{ p->GetPosition().x, p->GetPosition().y });
-        }
-        m_fArial20->Write(m_renderer->GetRenderer(), ("FPS: " + to_string(m_timing->GetFPS())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 10, 10 });
-        m_fArial20->Write(m_renderer->GetRenderer(), m_physics->ToString().c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 120, 10 });
-        
+
+
+
         SDL_RenderPresent(m_renderer->GetRenderer());
 
         //m_timing->CapFPS();

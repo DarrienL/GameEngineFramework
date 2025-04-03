@@ -3,6 +3,10 @@
 ObjectPool<Particle>* Particle::Pool;
 
 Particle::Particle() {
+	Reset();
+}
+
+void Particle::Reset() {
 	m_currentTime = 0;
 	m_lifeTime = 0;
 }
