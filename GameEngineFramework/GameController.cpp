@@ -92,7 +92,14 @@ void GameController::RunGame() {
 
         m_physics->Update(m_timing->GetDeltaTime());
 
+        Rect r = m_circle->Update(EN_AN_IDLE, m_timing->GetDeltaTime());
+        for (RigidBody* b : m_physics->GetBodies()) {
+            auto pos = b->GetPosition();
+            m_renderer->RenderTexture(m_circle, r, Rect(pos.x - 16, pos.y - 16, pos.x + 16, pos.y + 16), b->GetMass() + 127);
+        }
 
+        m_fArial20->Write(m_renderer->GetRenderer(), ("FPS: " + to_string(m_timing->GetFPS())).c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 10, 10 });
+        m_fArial20->Write(m_renderer->GetRenderer(), m_physics->ToString().c_str(), SDL_Color{ 0, 0, 255 }, SDL_Point{ 120, 10 });
 
         SDL_RenderPresent(m_renderer->GetRenderer());
 
