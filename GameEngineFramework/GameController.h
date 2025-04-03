@@ -2,13 +2,13 @@
 #define GAME_CONTROLLER_H
 
 #include "StandardIncludes.h"
-#include "AudioController.h"
 
 class Renderer;
 class TTFont;
 class InputController;
 class Timing;
 class PhysicsController;
+class SpriteSheet;
 
 class GameController : public Singleton<GameController>
 {
@@ -32,6 +32,7 @@ private:
 	InputController* m_input;
 	Timing* m_timing;
 	PhysicsController* m_physics;
+	SpriteSheet* m_circle;
 };
 
 #endif

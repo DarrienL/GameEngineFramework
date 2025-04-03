@@ -6,6 +6,9 @@
 #include "Mouse.h"
 #include "Timing.h"
 #include "PhysicsController.h"
+#include "SpriteSheet.h"
+#include "SpriteAnim.h"
+#include "RigidBody.h"
 
 GameController::GameController() {
     m_quit = false;
@@ -15,6 +18,7 @@ GameController::GameController() {
     m_input = nullptr;
     m_timing = nullptr;
     m_physics = nullptr;
+    m_circle = nullptr;
 }
 
 GameController::~GameController() { 
@@ -30,6 +34,9 @@ void GameController::Initialize() {
     m_fArial20->Initialize(20);
     m_timing = &Timing::Instance();
     m_physics = &PhysicsController::Instance();
+
+    SpriteSheet::Pool = new ObjectPool<SpriteSheet>();
+    SpriteSheet::Pool = new ObjectPool<SpriteSheet>();
 }
 
 void GameController::ShutDown() {

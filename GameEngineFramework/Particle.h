@@ -17,6 +17,7 @@ public:
 
 	// Methods
 	void Update(float _deltaTime, glm::vec2 _force) override;
+	void Reset();
 
 	// Members
 	static ObjectPool<Particle>* Pool;

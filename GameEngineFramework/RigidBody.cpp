@@ -1,5 +1,8 @@
 #include "RigidBody.h"
 
+ObjectPool<RigidBody>* RigidBody::Pool;
+
+
 RigidBody::RigidBody() {
 	m_position = { };
 	m_velocity = { };
