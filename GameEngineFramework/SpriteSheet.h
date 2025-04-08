@@ -19,7 +19,8 @@ enum AnimationNames {
 	EN_AN_DASH,
 	EN_AN_DASH_ATTACK,
 	EN_AN_SLIDE,
-	EN_AN_LADDER_GRAB
+	EN_AN_LADDER_GRAB,
+	EN_AN_SMOKE_RISE
 };
 
 class SpriteSheet : public Texture
@@ -37,7 +38,9 @@ public:
 	void SetSize(byte _rows, byte _columns, byte _clipSizeX, byte _clipSizeY);
 	void AddAnimation(AnimationNames _name, short _clipStart, short _clipCount, float _clipSpeed);
 	Rect Update(AnimationNames _name, float _deltaTime);
+	void Update(AnimationNames _name, float _deltaTime, Rect* _rect);
 	int GetCurrentClip(AnimationNames _name);
+	void ResetCurrentClip(AnimationNames _name);
 
 	// Members
 	static ObjectPool<SpriteSheet>* Pool;
