@@ -120,6 +120,9 @@
     <ClInclude Include="Heroine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Player1State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileController.cpp">
@@ -213,6 +216,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Heroine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player1State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

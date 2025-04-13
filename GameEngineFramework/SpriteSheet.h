@@ -20,7 +20,12 @@ enum AnimationNames {
 	EN_AN_DASH_ATTACK,
 	EN_AN_SLIDE,
 	EN_AN_LADDER_GRAB,
-	EN_AN_SMOKE_RISE
+	EN_AN_SMOKE_RISE,
+	EN_AN_RPS_IDLE,
+	EN_AN_RPS_ROLL,
+	EN_AN_RPS_PAPER,
+	EN_AN_RPS_SCISSORS,
+	EN_AN_RPS_ROCK
 };
 
 class SpriteSheet : public Texture
