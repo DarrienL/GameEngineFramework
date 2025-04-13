@@ -45,8 +45,6 @@ void Player1::Serialize(std::ostream& _stream) {
 	_stream.write(reinterpret_cast<char*>(&m_wins), sizeof(m_wins));
 	_stream.write(reinterpret_cast<char*>(&m_losses), sizeof(m_losses));
 	_stream.write(reinterpret_cast<char*>(&m_status), sizeof(m_status));
-	SerializePointer(_stream, m_state);
-	SerializePointer(_stream, m_rigidBody);
 	SerializePointer(_stream, m_animations);
 }
 
@@ -56,8 +54,6 @@ void Player1::Deserialize(std::istream& _stream) {
 	_stream.read(reinterpret_cast<char*>(&m_wins), sizeof(m_wins));
 	_stream.read(reinterpret_cast<char*>(&m_losses), sizeof(m_losses));
 	_stream.read(reinterpret_cast<char*>(&m_status), sizeof(m_status));
-	DeserializePointer(_stream, m_state);
-	DeserializePointer(_stream, m_rigidBody);
 	DeserializePointer(_stream, m_animations);
 }
 

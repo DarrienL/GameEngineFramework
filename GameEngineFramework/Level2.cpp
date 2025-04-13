@@ -143,6 +143,30 @@ void Level2::Run(Renderer* _renderer, TTFont* _font, string _names[]) {
 
 		SDL_RenderPresent(_renderer->GetRenderer());
 
+		// FPS cap
 		Timing::Instance().CapFPS();
 	}
+}
+
+void Level2::Serialize(std::ostream& _stream) {
+	_stream.write(reinterpret_cast<char*>(&m_quit), sizeof(m_quit));
+	_stream.write(reinterpret_cast<char*>(&m_saves), sizeof(m_saves));
+	_stream.write(reinterpret_cast<char*>(&m_loads), sizeof(m_loads));
+	_stream.write(reinterpret_cast<char*>(&m_elapsedTime), sizeof(m_elapsedTime));
+	SerializePointer(_stream, m_player1);
+	SerializePointer(_stream, m_player2);
+}
+
+void Level2::Deserialize(std::istream& _stream) {
+	_stream.read(reinterpret_cast<char*>(&m_quit), sizeof(m_quit));
+	_stream.read(reinterpret_cast<char*>(&m_saves), sizeof(m_saves));
+	_stream.read(reinterpret_cast<char*>(&m_loads), sizeof(m_loads));
+	_stream.read(reinterpret_cast<char*>(&m_elapsedTime), sizeof(m_elapsedTime));
+	DeserializePointer(_stream, m_player1);
+	DeserializePointer(_stream, m_player2);
+}
+
+void Level2::ToString() {
+	cout << "LEVEL 2" << endl;
+	Level::ToString();
 }

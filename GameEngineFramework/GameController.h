@@ -5,12 +5,11 @@
 #include "AudioController.h"
 
 class Renderer;
-class TTFont;
 class InputController;
 class Timing;
 class PhysicsController;
-class SpriteSheet;
-class Heroine;
+class Level1;
+class Song;
 
 class GameController : public Singleton<GameController>
 {
@@ -22,19 +21,17 @@ public:
 	// Methods
 	void RunGame();
 	void Initialize();
-	void HandleInput(SDL_Event _event);
 	void ShutDown();
 
 private:
 	// Members
-	SDL_Event m_sdlEvent;
 	Renderer* m_renderer;
-	TTFont* m_fArial20;
-	bool m_quit;
+	AudioController* m_audio;
 	InputController* m_input;
-	Timing* m_timing;
 	PhysicsController* m_physics;
-	Heroine* m_heroine;
+	Timing* m_timing;
+	Level1* m_level1;
+	Song* m_song;
 };
 
 #endif

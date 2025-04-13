@@ -11,7 +11,7 @@ class SpriteSheet;
 class SoundEffect;
 class TTFont;
 
-class Player1 : Resource
+class Player1 : public Resource
 {
 public:
 	// Constructors / Destructors

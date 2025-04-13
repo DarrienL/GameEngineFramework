@@ -1,25 +1,18 @@
 #include "GameController.h"
 #include "Renderer.h"
-#include "TTFont.h"
 #include "InputController.h"
-#include "Keyboard.h"
-#include "Mouse.h"
 #include "Timing.h"
 #include "PhysicsController.h"
-#include "SpriteSheet.h"
-#include "SpriteAnim.h"
-#include "RigidBody.h"
-#include "Heroine.h"
+#include "Level1.h"
 
 GameController::GameController() {
-    m_quit = false;
-    m_sdlEvent = { };
     m_renderer = nullptr;
-    m_fArial20 = nullptr;
+    m_audio = nullptr;
     m_input = nullptr;
-    m_timing = nullptr;
     m_physics = nullptr;
-    m_heroine = nullptr;
+    m_timing = nullptr;
+    m_level1 = nullptr;
+    m_song = nullptr;
 }
 
 GameController::~GameController() {
@@ -27,70 +20,33 @@ GameController::~GameController() {
 }
 
 void GameController::Initialize() {
-    AssetController::Instance().Initialize(10000000); // Allocate 10MB
-    SpriteSheet::Pool = new ObjectPool<SpriteSheet>();
-    SpriteAnim::Pool = new ObjectPool<SpriteAnim>();
+    AssetController::Instance().Initialize(20000000); // Allocate 20MB
     m_renderer = &Renderer::Instance();
     m_renderer->Initialize();
+    m_audio = &AudioController::Instance();
     m_input = &InputController::Instance();
-    m_fArial20 = new TTFont();
-    m_fArial20->Initialize(20);
-    m_timing = &Timing::Instance();
     m_physics = &PhysicsController::Instance();
-    m_heroine = new Heroine();
+    m_timing = &Timing::Instance();
+    m_level1 = new Level1;
+    m_song = m_audio->LoadSong("../Assets/Audio/Music/Track1.mp3");
 }
 
 void GameController::ShutDown() {
-    if (m_heroine != nullptr) {
-        delete m_heroine;
-        m_heroine = nullptr;
+    if (m_level1 != nullptr) {
+        delete m_level1;
+        m_level1 = nullptr;
     }
 
-    if (m_fArial20 != nullptr) {
-        delete m_fArial20;
-        m_fArial20 = nullptr;
+    if (m_song != nullptr) {
+        delete m_song;
+        m_song = nullptr;
     }
-
-    if (SpriteAnim::Pool != nullptr) {
-        delete SpriteAnim::Pool;
-        SpriteAnim::Pool = nullptr;
-    }
-
-    if (SpriteSheet::Pool != nullptr) {
-        delete SpriteSheet::Pool;
-        SpriteSheet::Pool = nullptr;
-    }
-}
-
-void GameController::HandleInput(SDL_Event _event) {
-    if ((m_sdlEvent.type == SDL_QUIT) || (m_input->KB()->KeyUp(_event, SDLK_ESCAPE))) {
-        m_quit = true;
-    }
-
-    m_heroine->HandleInput(_event, m_timing->GetDeltaTime());
-    m_input->MS()->ProcessButtons(_event);
 }
 
 void GameController::RunGame() {
     Initialize();
-
-    while (!m_quit) {
-        m_timing->Tick();
-
-        m_renderer->SetDrawColor(Color(255, 255, 255, 255));
-        m_renderer->ClearScreen();
-
-        while (SDL_PollEvent(&m_sdlEvent) != 0) {
-            HandleInput(m_sdlEvent);
-        }
-
-        m_physics->Update(m_timing->GetDeltaTime());
-        m_heroine->Update(m_timing->GetDeltaTime());
-
-        m_heroine->Render(m_renderer);
-
-        SDL_RenderPresent(m_renderer->GetRenderer());
-
-        //m_timing->CapFPS();
-    }
+    m_audio->Play(m_song);
+    m_level1->Run(m_renderer);
+    m_audio->StopMusic();
+    ShutDown();
 }

@@ -9,7 +9,7 @@
 class SpriteSheet;
 class TTFont;
 
-class Player2 : Resource
+class Player2 : public Resource
 {
 public:
 	// Constructors / Destructors

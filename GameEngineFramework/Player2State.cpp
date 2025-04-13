@@ -6,11 +6,11 @@
 #include "Player2.h"
 #include "SpriteSheet.h"
 
-IdleState Player2State::m_idle;
-RollingState Player2State::m_rolling;
-PaperState Player2State::m_paper;
-ScissorsState Player2State::m_scissors;
-RockState Player2State::m_rock;
+IdleState2 Player2State::m_idle;
+RollingState2 Player2State::m_rolling;
+PaperState2 Player2State::m_paper;
+ScissorsState2 Player2State::m_scissors;
+RockState2 Player2State::m_rock;
 
 void Player2State::HandleInput(Player2* _player, SDL_Event _event) {
 	// Keyboard Input
@@ -41,7 +41,7 @@ void Player2State::HandleInput(Player2* _player, SDL_Event _event) {
 	}
 }
 
-void IdleState::HandleInput(Player2* _player, SDL_Event _event) {
+void IdleState2::HandleInput(Player2* _player, SDL_Event _event) {
 	Player2State::HandleInput(_player, _event);
 	if (InputController::Instance().KB()->KeyDown(_event, SDLK_SPACE)) {
 		_player->SetState(Player2State::GetRollingState());
@@ -49,11 +49,11 @@ void IdleState::HandleInput(Player2* _player, SDL_Event _event) {
 	}
 }
 
-void IdleState::Update(Player2* _player, float _deltaTime) {
+void IdleState2::Update(Player2* _player, float _deltaTime) {
 	_player->GetAnimations()->Update(EN_AN_RPS_IDLE, _deltaTime, _player->GetSrcRect());
 }
 
-void RollingState::HandleInput(Player2* _player, SDL_Event _event) {
+void RollingState2::HandleInput(Player2* _player, SDL_Event _event) {
 	Player2State::HandleInput(_player, _event);
 	if (InputController::Instance().KB()->KeyDown(_event, SDLK_SPACE)) {
 		int rolled = _player->RNG();
@@ -72,11 +72,11 @@ void RollingState::HandleInput(Player2* _player, SDL_Event _event) {
 	}
 }
 
-void RollingState::Update(Player2* _player, float _deltaTime) {
+void RollingState2::Update(Player2* _player, float _deltaTime) {
 	_player->GetAnimations()->Update(EN_AN_RPS_ROLL, _deltaTime, _player->GetSrcRect());
 }
 
-void PaperState::HandleInput(Player2* _player, SDL_Event _event) {
+void PaperState2::HandleInput(Player2* _player, SDL_Event _event) {
 	Player2State::HandleInput(_player, _event);
 	if (InputController::Instance().KB()->KeyDown(_event, SDLK_SPACE)) {
 		_player->SetState(Player2State::GetIdleState());
@@ -84,11 +84,11 @@ void PaperState::HandleInput(Player2* _player, SDL_Event _event) {
 	}
 }
 
-void PaperState::Update(Player2* _player, float _deltaTime) {
+void PaperState2::Update(Player2* _player, float _deltaTime) {
 	_player->GetAnimations()->Update(EN_AN_RPS_PAPER, _deltaTime, _player->GetSrcRect());
 }
 
-void ScissorsState::HandleInput(Player2* _player, SDL_Event _event) {
+void ScissorsState2::HandleInput(Player2* _player, SDL_Event _event) {
 	Player2State::HandleInput(_player, _event);
 	if (InputController::Instance().KB()->KeyDown(_event, SDLK_SPACE)) {
 		_player->SetState(Player2State::GetIdleState());
@@ -96,11 +96,11 @@ void ScissorsState::HandleInput(Player2* _player, SDL_Event _event) {
 	}
 }
 
-void ScissorsState::Update(Player2* _player, float _deltaTime) {
+void ScissorsState2::Update(Player2* _player, float _deltaTime) {
 	_player->GetAnimations()->Update(EN_AN_RPS_SCISSORS, _deltaTime, _player->GetSrcRect());
 }
 
-void RockState::HandleInput(Player2* _player, SDL_Event _event) {
+void RockState2::HandleInput(Player2* _player, SDL_Event _event) {
 	Player2State::HandleInput(_player, _event);
 	if (InputController::Instance().KB()->KeyDown(_event, SDLK_SPACE)) {
 		_player->SetState(Player2State::GetIdleState());
@@ -108,6 +108,6 @@ void RockState::HandleInput(Player2* _player, SDL_Event _event) {
 	}
 }
 
-void RockState::Update(Player2* _player, float _deltaTime) {
+void RockState2::Update(Player2* _player, float _deltaTime) {
 	_player->GetAnimations()->Update(EN_AN_RPS_ROCK, _deltaTime, _player->GetSrcRect());
 }
