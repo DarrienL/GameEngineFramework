@@ -14,17 +14,17 @@ RockState Player1State::m_rock;
 
 void Player1State::HandleInput(Player1* _player, SDL_Event _event) {
 	// Keyboard Input
-	if (InputController::Instance().KB()->KeyDown(_event, SDLK_w) && (_player->GetRigidBody()->GetPosition.Y) <= 0) {
-		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition) + glm::vec2(0, -10));
+	if (InputController::Instance().KB()->KeyDown(_event, SDLK_w) && (_player->GetRigidBody()->GetPosition().y) <= 0) {
+		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition()) + glm::vec2(0, -10));
 	}
-	else if (InputController::Instance().KB()->KeyDown(_event, SDLK_a) && (_player->GetRigidBody()->GetPosition.X) <= 0) {
-		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition) + glm::vec2(-10, 0));
+	else if (InputController::Instance().KB()->KeyDown(_event, SDLK_a) && (_player->GetRigidBody()->GetPosition().x) <= 0) {
+		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition()) + glm::vec2(-10, 0));
 	}
-	else if (InputController::Instance().KB()->KeyDown(_event, SDLK_s) && (_player->GetRigidBody()->GetPosition.Y) >= 910) {
-		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition) + glm::vec2(0, 10));
+	else if (InputController::Instance().KB()->KeyDown(_event, SDLK_s) && (_player->GetRigidBody()->GetPosition().y) >= 910) {
+		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition()) + glm::vec2(0, 10));
 	}
-	else if (InputController::Instance().KB()->KeyDown(_event, SDLK_d) && (_player->GetRigidBody()->GetPosition.X) >= 1640) {
-		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition) + glm::vec2(10, 0));
+	else if (InputController::Instance().KB()->KeyDown(_event, SDLK_d) && (_player->GetRigidBody()->GetPosition().x) >= 1640) {
+		_player->GetRigidBody()->SetPosition((_player->GetRigidBody()->GetPosition()) + glm::vec2(10, 0));
 	}
 
 	// Mouse Input
