@@ -147,6 +147,7 @@ copy /Y "$(SolutionDir)External\SDL2_mixer-2.6.2\lib\x64\SDL2_mixer.dll" "$(Targ
     <ClInclude Include="InputController.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Level2.h" />
     <ClInclude Include="Matrix.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="ObjectPool.h" />
@@ -154,6 +155,8 @@ copy /Y "$(SolutionDir)External\SDL2_mixer-2.6.2\lib\x64\SDL2_mixer.dll" "$(Targ
     <ClInclude Include="PhysicsController.h" />
     <ClInclude Include="Player1.h" />
     <ClInclude Include="Player1State.h" />
+    <ClInclude Include="Player2.h" />
+    <ClInclude Include="Player2State.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="RenderTarget.h" />
     <ClInclude Include="Resource.h" />
@@ -185,6 +188,7 @@ copy /Y "$(SolutionDir)External\SDL2_mixer-2.6.2\lib\x64\SDL2_mixer.dll" "$(Targ
     <ClCompile Include="InputController.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Level.cpp" />
+    <ClCompile Include="Level2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Mouse.cpp" />
@@ -192,6 +196,8 @@ copy /Y "$(SolutionDir)External\SDL2_mixer-2.6.2\lib\x64\SDL2_mixer.dll" "$(Targ
     <ClCompile Include="PhysicsController.cpp" />
     <ClCompile Include="Player1.cpp" />
     <ClCompile Include="Player1State.cpp" />
+    <ClCompile Include="Player2.cpp" />
+    <ClCompile Include="Player2State.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="RenderTarget.cpp" />
     <ClCompile Include="Resource.cpp" />

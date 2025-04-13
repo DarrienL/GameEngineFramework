@@ -1,7 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "Unit.h"
+#include "Resource.h"
 
 class Level : public Resource
 {
@@ -11,18 +11,13 @@ public:
 	virtual ~Level();
 
 	// Methods
+	virtual void Initialize() { };
+	virtual void Shutdown() { };
+	virtual void HandleInput(SDL_Event _event) { };
+	virtual void Run() { };
 	void Serialize(std::ostream& _stream) override;
 	void Deserialize(std::istream& _stream) override;
 	void ToString() override;
-	void AssignNonDefaultValues() override;
-
-private:
-	// Members
-	int m_mapSizeX;
-	int m_mapSizeY;
-	float m_gameTime;
-	vector<Unit*> m_units;
-	// and more
 };
 
 #endif

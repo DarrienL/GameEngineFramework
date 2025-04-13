@@ -126,6 +126,15 @@
     <ClInclude Include="Player1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Player2State.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Level2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileController.cpp">
@@ -225,6 +234,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Player1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player2State.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Level2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

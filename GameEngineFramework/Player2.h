@@ -1,29 +1,27 @@
-#ifndef PLAYER_1_H
-#define PLAYER_1_H
+#ifndef PLAYER_2_H
+#define PLAYER_2_H
 
 #include "Resource.h"
-#include "Player1State.h"
+#include "Player2State.h"
 #include "RigidBody.h"
 #include "StandardIncludes.h"
-#include "AudioController.h"
 
 class SpriteSheet;
-class SoundEffect;
 class TTFont;
 
-class Player1 : Resource
+class Player2 : Resource
 {
 public:
 	// Constructors / Destructors
-	Player1();
-	virtual ~Player1();
+	Player2();
+	virtual ~Player2();
 
 	// Accessors
 	void SetOutcome(string _outcome) { m_outcome = _outcome; }
 	int GetStatus() { return m_status; }
 	void SetStatus(int _status) { m_status = _status; }
-	Player1State* GetState() { return m_state; }
-	void SetState(Player1State* _state) { m_state = _state; }
+	Player2State* GetState() { return m_state; }
+	void SetState(Player2State* _state) { m_state = _state; }
 	SpriteSheet* GetAnimations() { return m_animations; }
 	Rect* GetSrcRect() { return &m_srcRect; }
 	RigidBody* GetRigidBody() { return m_rigidBody; }
@@ -40,8 +38,6 @@ public:
 	void Win();
 	void Lose();
 	int RNG();
-	void PlayRollSound();
-	void PlayGunSound();
 
 
 private:
@@ -50,13 +46,13 @@ private:
 	int m_wins;
 	int m_losses;
 	int m_status;
-	Player1State* m_state;
+	Player2State* m_state;
 	RigidBody* m_rigidBody;
 	SpriteSheet* m_animations;
 	Rect m_srcRect;
-	SoundEffect* m_effects[MaxEffectChannels];
 	TTFont* m_fArial20;
 };
 
 #endif
+
 
